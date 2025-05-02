@@ -26,6 +26,5 @@ urlpatterns = [
     path('api/home/', views.public_home, name='public_home'),
     path('api/list/', views.protected_list, name='protected_list'),
     path('api/register/', views.register, name='register'),
-
-    
+    path('api/userinfo/', views.user_info, name='user_info'),
 ]

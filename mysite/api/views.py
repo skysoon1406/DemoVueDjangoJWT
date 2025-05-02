@@ -3,7 +3,6 @@ from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.decorators import api_view
 from django.contrib.auth.models import User
 # Create your views here.
 
@@ -29,3 +28,13 @@ def register(request):
     
     user = User.objects.create_user(username=username, password=password)
     return Response({'message': 'User registered successfully'})
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_info(request):
+    user = request.user
+    return Response({
+        'username': user.username,
+        'email': user.email,
+        'id': user.id,
+    })
