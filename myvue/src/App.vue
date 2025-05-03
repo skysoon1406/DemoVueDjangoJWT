@@ -1,4 +1,72 @@
 <template>
+    <div>
+      <h1>我的專案</h1>
+      <nav>
+        <router-link to="/">首頁</router-link> |
+        <router-link to="/register">註冊</router-link> |
+        <router-link to="/login">登入</router-link> |
+        <router-link to="/list">保護列表</router-link>
+      </nav>
+  
+      <div v-if="userInfo">
+        <p>{{ userInfo.username }}，已登入</p>
+        <button @click="logout">登出</button>
+      </div>
+      <div v-else>
+        <p>未登入</p>
+      </div>
+  
+      <router-view />
+    </div>
+  </template>
+  
+  <script setup>
+  import { ref, onMounted } from 'vue'
+  import axios from 'axios'
+  
+  const userInfo = ref(null)
+  const token = ref(localStorage.getItem('access_token') || '')
+  
+  async function getUserInfo() {
+      if (!token.value) {
+          userInfo.value = null
+          return
+      }
+      try {
+          const res = await axios.get('http://127.0.0.1:8000/api/userinfo/', {
+              headers: {
+                  Authorization: `Bearer ${token.value}`
+              }
+          })
+          userInfo.value = res.data
+      } catch (err) {
+          userInfo.value = null
+      }
+  }
+  
+  function logout() {
+      localStorage.removeItem('access_token')
+      localStorage.removeItem('refresh_token')
+      token.value = ''
+      userInfo.value = null
+      alert('已登出')
+  }
+  
+  onMounted(() => {
+      getUserInfo()
+  })
+  </script>
+  
+  <style>
+  nav a {
+    margin: 0 10px;
+  }
+  </style>
+  
+  
+
+
+<!-- <template>
   <h1>Vue + Django JWT Demo</h1>
 
   <div v-if="userInfo">
@@ -122,4 +190,4 @@ async function getUserInfo() {
 onMounted(() => {
     getUserInfo()
 })
-</script>
+</script> -->
