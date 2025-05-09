@@ -14,7 +14,7 @@ def public_home(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def protected_list(request):
-    return Response({"items": ["Apple", "Banana", "Cherry"]})
+    return Response({"items": ["註冊登入才能看", "沒註冊登入看不到", "看得到代表登入成功了！"]})
 
 @api_view(['POST'])
 def register(request):
